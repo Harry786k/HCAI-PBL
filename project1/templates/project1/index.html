@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 1: ML Interface</title>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
+
+    <h1>Automated Machine Learning</h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button type="submit">Upload & Train AI</button>
+    </form>
+
+    <hr style="margin: 30px 0;">
+
+    {% if plot_url %}
+        <h2>Data Visualization</h2>
+        <img src="{{ plot_url }}" alt="Data Plot" style="max-width: 800px; border: 1px solid #ccc; border-radius: 8px;">
+        
+        <!-- NEW: Displaying the Machine Learning Results! -->
+        <div style="margin-top: 30px; padding: 20px; background-color: #f4f4f9; border-radius: 8px; display: inline-block; text-align: left;">
+            <h2 style="margin-top: 0; color: #333;">Training Results</h2>
+            <p><strong>Algorithm Used:</strong> K-Nearest Neighbors (KNN)</p>
+            <p><strong>Data Split:</strong> 80% Training / 20% Testing</p>
+            <p><strong>Best Hyperparameter:</strong> k = {{ best_k }}</p>
+            <p style="font-size: 1.2em; color: #2e7d32;">
+                <strong>Highest Accuracy: {{ accuracy }}%</strong>
+            </p>
+        </div>
+    {% endif %}
+
+</body>
+</html>

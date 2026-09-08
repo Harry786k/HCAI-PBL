@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Design 1: Pairwise Comparison</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f9;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        .movies {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .movie-card {
+            width: 320px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .movie-card h2 {
+            min-height: 55px;
+        }
+
+        .movie-card p {
+            color: #555;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 13px 25px;
+            background: #147df5;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .message {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Movie Preference Study</h1>
+
+<p><strong>Step 1 of 2</strong></p>
+
+<p>
+    Compare the two movies below and choose the one
+    you would prefer to watch.
+</p>
+
+    {% if message %}
+        <p class="message">{{ message }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+       
+        <input type="hidden"
+       name="participant_id"
+       value="{{ participant_id }}">
+
+<input type="hidden"
+       name="movie1"
+       value="{{ movie1.movie_title }}">
+
+<input type="hidden"
+       name="movie2"
+       value="{{ movie2.movie_title }}">
+
+        <div class="movies">
+
+            <div class="movie-card">
+                <h2>{{ movie1.movie_title }}</h2>
+
+                <p><strong>Year:</strong> {{ movie1.title_year|floatformat:0 }}</p>
+                <p><strong>IMDb Score:</strong> {{ movie1.imdb_score }}</p>
+                <p><strong>Genres:</strong> {{ movie1.genres }}</p>
+
+                <button
+                    type="submit"
+                    name="preference"
+                    value="{{ movie1.movie_title }}"
+                >
+                    Choose this movie
+                </button>
+            </div>
+
+            <div class="movie-card">
+                <h2>{{ movie2.movie_title }}</h2>
+
+                <p><strong>Year:</strong> {{ movie2.title_year|floatformat:0 }}</p>
+                <p><strong>IMDb Score:</strong> {{ movie2.imdb_score }}</p>
+                <p><strong>Genres:</strong> {{ movie2.genres }}</p>
+
+                <button
+                    type="submit"
+                    name="preference"
+                    value="{{ movie2.movie_title }}"
+                >
+                    Choose this movie
+                </button>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

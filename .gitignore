@@ -172,3 +172,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Local project files
+testenv/
+.DS_Store
+media/
+project4/study_results.csv

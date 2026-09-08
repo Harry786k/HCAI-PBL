@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expert Dashboard - Active Learning</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+        .article-box { background: #eef2f5; padding: 25px; border-left: 6px solid #3498db; border-radius: 5px; margin-bottom: 30px; font-size: 1.1em; line-height: 1.6; color: #333; }
+        .btn-group { display: flex; justify-content: space-between; gap: 15px; }
+        button { flex: 1; padding: 15px; font-size: 1.1em; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; color: white; transition: transform 0.1s, opacity 0.3s; }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+        .btn-world { background-color: #e74c3c; }
+        .btn-sports { background-color: #f39c12; }
+        .btn-business { background-color: #27ae60; }
+        .btn-scitech { background-color: #8e44ad; }
+        .message { padding: 15px; background: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px; text-align: center; font-weight: bold; border: 1px solid #c3e6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Human-AI Collaboration Dashboard</h1>
+        <p class="subtitle">The Active Learning system is unsure about the following article. Please provide the expert label.</p>
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="{% static 'project3/report.pdf' %}" download style="background-color: #34495e; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                📄 Download Project 3 Report
+            </a>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px;">
+            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #3498db; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 1: Baseline AI</div>
+                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">91.21%</div>
+            </div>
+            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #e74c3c; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 2: Expert</div>
+                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">72.14%</div>
+            </div>
+            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #f39c12; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 3: L2D Team</div>
+                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">88.22%</div>
+            </div>
+            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #27ae60; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 4: Active Learning</div>
+                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">86.80%</div>
+            </div>
+        </div>
+        
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+
+        <div class="article-box">
+            {{ article }}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="submit" name="label" value="World" class="btn-world">🌍 World</button>
+                <button type="submit" name="label" value="Sports" class="btn-sports">⚽️ Sports</button>
+                <button type="submit" name="label" value="Business" class="btn-business">💼 Business</button>
+                <button type="submit" name="label" value="Sci/Tech" class="btn-scitech">🔬 Sci/Tech</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

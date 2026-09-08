@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Design 2: Top-10 Ranking</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 430px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            background-color: #e9ecef;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: grab;
+            border: 1px solid #dee2e6;
+            font-size: 16px;
+        }
+
+        li.dragging {
+            opacity: 0.5;
+        }
+
+        .rank {
+            font-weight: bold;
+            width: 30px;
+            color: #555;
+        }
+
+        .movie-title {
+            flex: 1;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .message {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Rank your top 10</h2>
+    <p><strong>Step 2 of 2</strong></p>
+
+    <p>
+        Drag and drop the movies from your most preferred
+        (top) to your least preferred (bottom).
+    </p>
+
+    {% if message %}
+        <div class="message">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <ul id="sortable-list">
+
+        {% for movie in movies %}
+
+            <li draggable="true" data-id="{{ movie }}">
+                <span class="rank">{{ forloop.counter }}.</span>
+                <span class="movie-title">{{ movie }}</span>
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+    <form method="POST" id="ranking-form">
+        {% csrf_token %}
+
+    <input
+        type="hidden"
+        name="participant_id"
+        value="{{ participant_id }}"
+    >
+
+    <input
+        type="hidden"
+        name="ranked_order"
+        id="ranked_order"
+    >
+
+        <button
+            type="submit"
+            class="submit-btn"
+        >
+            Submit Ranking
+        </button>
+    </form>
+
+</div>
+
+
+<script>
+
+    const list = document.getElementById("sortable-list");
+
+    let draggedItem = null;
+
+
+    // Start dragging
+    list.addEventListener("dragstart", function(event) {
+
+        if (event.target.tagName === "LI") {
+
+            draggedItem = event.target;
+
+            draggedItem.classList.add(
+                "dragging"
+            );
+        }
+
+    });
+
+
+    // Finish dragging
+    list.addEventListener("dragend", function() {
+
+        if (draggedItem) {
+
+            draggedItem.classList.remove(
+                "dragging"
+            );
+
+            draggedItem = null;
+
+            updateRanks();
+        }
+
+    });
+
+
+    // Move element
+    list.addEventListener("dragover", function(event) {
+
+        event.preventDefault();
+
+        const afterElement =
+            getDragAfterElement(
+                list,
+                event.clientY
+            );
+
+        const dragging =
+            document.querySelector(
+                ".dragging"
+            );
+
+        if (!dragging) {
+            return;
+        }
+
+        if (afterElement == null) {
+
+            list.appendChild(
+                dragging
+            );
+
+        } else {
+
+            list.insertBefore(
+                dragging,
+                afterElement
+            );
+        }
+
+    });
+
+
+    function getDragAfterElement(
+        container,
+        y
+    ) {
+
+        const elements = [
+            ...container.querySelectorAll(
+                "li:not(.dragging)"
+            )
+        ];
+
+        return elements.reduce(
+            function(closest, child) {
+
+                const box =
+                    child.getBoundingClientRect();
+
+                const offset =
+                    y -
+                    box.top -
+                    box.height / 2;
+
+                if (
+                    offset < 0 &&
+                    offset > closest.offset
+                ) {
+
+                    return {
+                        offset: offset,
+                        element: child
+                    };
+
+                }
+
+                return closest;
+
+            },
+            {
+                offset:
+                    Number.NEGATIVE_INFINITY
+            }
+        ).element;
+    }
+
+
+    // Update visible rank numbers
+    function updateRanks() {
+
+        const items =
+            list.querySelectorAll("li");
+
+        items.forEach(
+            function(item, index) {
+
+                item.querySelector(
+                    ".rank"
+                ).textContent =
+                    (index + 1) + ".";
+            }
+        );
+    }
+
+
+    // Save current ranking before POST
+    document.getElementById(
+        "ranking-form"
+    ).addEventListener(
+        "submit",
+        function() {
+
+            const movies = [
+                ...list.querySelectorAll("li")
+            ].map(
+                item =>
+                    item.dataset.id
+            );
+
+            document.getElementById(
+                "ranked_order"
+            ).value =
+                movies.join("||");
+        }
+    );
+
+</script>
+
+</body>
+</html>

@@ -1,55 +1,138 @@
-{% extends 'base.html' %}
-
-{%  load static %}
-
-{% block extra_css %}
-        <link rel= "stylesheet" href="{% static 'home/style.css'%}">
-{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<div class="box">
-    <div class="title-container">
-        <div class = "title">HCAI project hub</div>
+<style>
+    body {
+        background: #f4f6f8;
+        font-family: Arial, sans-serif;
+    }
+
+    .home-container {
+        max-width: 900px;
+        margin: 70px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .hero {
+        margin-bottom: 40px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+        color: #222;
+    }
+
+    .hero p {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .student-card {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 14px 24px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        font-weight: bold;
+        color: #333;
+    }
+
+    .projects-title {
+        margin-top: 45px;
+        margin-bottom: 25px;
+        font-size: 28px;
+        color: #222;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+        max-width: 700px;
+        margin: auto;
+    }
+
+    .project-card {
+        background: white;
+        padding: 28px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        text-decoration: none;
+        color: #222;
+        transition: 0.2s;
+        border-top: 5px solid #1677ff;
+    }
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 7px 18px rgba(0,0,0,0.12);
+    }
+
+    .project-card h3 {
+        margin: 0 0 8px 0;
+        font-size: 22px;
+    }
+
+    .project-card p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="home-container">
+
+    <div class="hero">
+        <h1>HCAI Project Hub</h1>
+
+        <p>
+            Human-Centric Artificial Intelligence project collection.
+            Select a project below to open it.
+        </p>
+
+        {% for student in students %}
+            <div class="student-card">
+                {{ student.name }} — {{ student.matriculation }}
+            </div>
+        {% endfor %}
     </div>
 
-    <div class="main-text">
-    <div class="summary" >
-        <p class="centered-text">This page serves as the central hub for student 
-        projects developed as part of the <strong>Human-Centric Artificial Intelligence</strong> 
-        course, by the following group:</p>
+    <h2 class="projects-title">Projects</h2>
+
+    <div class="projects-grid">
+
+        {% for project in projects %}
+            <a href="{% url project.url_name %}" class="project-card">
+                <h3>{{ project.name }}</h3>
+
+                {% if project.name == "Project 1" %}
+                    <p>Automated Machine Learning</p>
+
+                {% elif project.name == "Project 2" %}
+                    <p>Model Explainability</p>
+
+                {% elif project.name == "Project 3" %}
+                    <p>Human-AI Collaboration</p>
+
+                {% elif project.name == "Project 4" %}
+                    <p>Preference Elicitation</p>
+                {% endif %}
+            </a>
+        {% endfor %}
+
     </div>
-    
-    <div class="students">
-        <ul class="student-list">
-            {% for student in students %}
-                <li class="student-item">
-                    <span class="student-name">{{ student.name }}</span> –
-                    <span class="student-id">{{ student.matriculation }}</span>
-                </li>
-            {% empty %}
-                <li>No students found.</li>
-            {% endfor %}
-        </ul>
-    </div>
-    
-    
-    <div class="projects">
-        <h2 style="text-align: center;">Projects</h2>
-        <div class="button-container">
-            {% for project in projects %}
-                <form action="{% url project.url_name %}" method="get" style="margin-bottom: 10px;">
-                    {% csrf_token %}
-                    <button type="submit">{{ project.name }}</button>
-                </form>
-            {% endfor %}
-        </div>
-    </div>
-    
 
 </div>
 
 {% endblock %}
-
-{% block script %}
-{% endblock script %}

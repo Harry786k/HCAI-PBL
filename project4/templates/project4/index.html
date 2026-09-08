@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Project 4: Preference Elicitation</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f5f9;
+            color: #222;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 80px auto;
+            background: white;
+            padding: 45px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 17px;
+        }
+
+        .report-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .report-btn {
+            display: inline-block;
+            background: #34495e;
+            color: white;
+            text-decoration: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .report-btn:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .designs {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            background: #fafafa;
+            border: 1px solid #e4e4e4;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #666;
+            min-height: 55px;
+            line-height: 1.5;
+        }
+
+        .design1 {
+            border-top: 5px solid #1565c0;
+        }
+
+        .design2 {
+            border-top: 5px solid #28a745;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .btn-blue {
+            background: #1565c0;
+        }
+
+        .btn-green {
+            background: #28a745;
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            margin-top: 40px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Project 4: Preference Elicitation</h1>
+
+    <p class="subtitle">
+        Compare two different methods for collecting movie preferences.
+    </p>
+
+    <div class="report-section">
+        <a
+            href="{% static 'project4/report.pdf' %}"
+            download
+            class="report-btn"
+        >
+            📄 Download Project 4 Report
+        </a>
+    </div>
+
+ <div class="designs">
+
+    <div class="card design1">
+        <h2>User Study</h2>
+
+        <p>
+            Complete two movie preference tasks:
+            first a pairwise comparison, then a top-10 ranking.
+        </p>
+
+        <a
+            href="{% url 'project4:design1' %}"
+            class="btn btn-blue"
+        >
+            Start User Study
+        </a>
+    </div>
+
+</div>
+
+    <div class="footer">
+        Human-Centric Artificial Intelligence
+    </div>
+
+</div>
+
+</body>
+</html>

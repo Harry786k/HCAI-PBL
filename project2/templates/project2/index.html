@@ -1,0 +1,584 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Project 2: Model Explainability</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 34px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        .model-options {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .model-options label {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        #lambda-slider {
+            width: 280px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .metric-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-top: 4px solid #1677ff;
+        }
+
+        .metric-box h3 {
+            margin: 0 0 8px;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .metric-box .value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        select, button {
+            padding: 10px 12px;
+            font-size: 15px;
+            border-radius: 7px;
+        }
+
+        select {
+            border: 1px solid #ccc;
+            background: white;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-green {
+            background: #28a745;
+        }
+
+        .btn-blue {
+            background: #1677ff;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .plots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .plot-box {
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .plot-box img {
+            width: 100%;
+            display: none;
+        }
+
+        .model-viz {
+            text-align: center;
+        }
+
+        .model-viz img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 9px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #f2f4f7;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 750px) {
+            .metrics,
+            .plots {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <h1>Palmer Penguins: Model Explainability</h1>
+
+    <div class="card">
+        <h2>Model Selection</h2>
+
+        <div class="model-options">
+            <label>
+                <input
+                    type="radio"
+                    name="modelType"
+                    value="tree"
+                    checked
+                    onchange="updateModel()"
+                >
+                Decision Tree
+            </label>
+
+            <label>
+                <input
+                    type="radio"
+                    name="modelType"
+                    value="logreg"
+                    onchange="updateModel()"
+                >
+                Logistic Regression
+            </label>
+        </div>
+
+        <div class="slider-row">
+            <strong>Regularization Parameter (λ)</strong>
+
+            <input
+                type="range"
+                id="lambda-slider"
+                min="0"
+                max="0.1"
+                step="0.001"
+                value="0"
+            >
+
+            <strong>
+                λ = <span id="lambda-display">0.000</span>
+            </strong>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Winning Model Metrics</h2>
+
+        <div class="metrics">
+            <div class="metric-box">
+                <h3>Test Accuracy</h3>
+                <div class="value">
+                    <span id="acc-text"></span>%
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <h3>Complexity Score</h3>
+                <div class="value">
+                    <span id="complexity-text"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Task 4: Counterfactual Explanations</h2>
+
+        <div class="controls-row">
+            <label>
+                <strong>Select Penguin:</strong>
+            </label>
+
+            <select id="penguin-select"></select>
+
+            <label>
+                <strong>Desired Species:</strong>
+            </label>
+
+            <select id="target-select">
+                <option value="Adelie">Adelie</option>
+                <option value="Gentoo">Gentoo</option>
+                <option value="Chinstrap">Chinstrap</option>
+            </select>
+
+            {% csrf_token %}
+
+            <button
+                type="button"
+                class="btn-green"
+                onclick="getCounterfactuals()"
+            >
+                Generate
+            </button>
+        </div>
+
+        <div id="cf-results"></div>
+    </div>
+
+    <div class="card">
+        <h2>Task 5: Feature Effect Plots</h2>
+
+        <p>
+            Explore how numerical features affect the model's
+            prediction probability for each penguin species.
+        </p>
+
+        <div class="controls-row">
+            <label>
+                <strong>Select Feature:</strong>
+            </label>
+
+            <select id="feature-select">
+                <option value="bill_length_mm">Bill Length (mm)</option>
+                <option value="bill_depth_mm">Bill Depth (mm)</option>
+                <option value="flipper_length_mm">Flipper Length (mm)</option>
+                <option value="body_mass_g">Body Mass (g)</option>
+            </select>
+
+            <button
+                type="button"
+                class="btn-blue"
+                onclick="getFeatureEffects()"
+            >
+                Generate Plots
+            </button>
+        </div>
+
+        <div id="effects-loading"></div>
+
+        <div class="plots">
+            <div class="plot-box">
+                <h3>PDP</h3>
+                <img id="pdp-image" alt="PDP Plot">
+            </div>
+
+            <div class="plot-box">
+                <h3>ALE</h3>
+                <img id="ale-image" alt="ALE Plot">
+            </div>
+        </div>
+    </div>
+
+    <div class="card model-viz">
+        <h2>Model Visualization</h2>
+
+        <img
+            id="model-image"
+            src=""
+            alt="Model Visualization"
+        >
+    </div>
+
+</div>
+
+
+<script>
+    const treeModels = JSON.parse('{{ trees_json|escapejs }}');
+    const logregModels = JSON.parse('{{ logreg_json|escapejs }}');
+    const penguinsList = JSON.parse('{{ penguins_list|escapejs }}');
+
+    const slider = document.getElementById('lambda-slider');
+    let currentBestModelParam = null;
+
+    const penguinSelect =
+        document.getElementById('penguin-select');
+
+    penguinsList.forEach((text, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = text;
+        penguinSelect.appendChild(option);
+    });
+
+    function updateModel() {
+        const lambda = parseFloat(slider.value);
+
+        document.getElementById(
+            'lambda-display'
+        ).textContent = lambda.toFixed(3);
+
+        const selectedType =
+            document.querySelector(
+                'input[name="modelType"]:checked'
+            ).value;
+
+        const activeModels =
+            selectedType === 'tree'
+                ? treeModels
+                : logregModels;
+
+        let bestModel = null;
+        let minScore = Infinity;
+
+        activeModels.forEach(model => {
+            const score =
+                model.error_rate +
+                lambda * model.complexity_score;
+
+            if (score < minScore) {
+                minScore = score;
+                bestModel = model;
+            }
+        });
+
+        if (!bestModel) return;
+
+        currentBestModelParam =
+            bestModel.param_val;
+
+        document.getElementById(
+            'acc-text'
+        ).textContent =
+            (bestModel.accuracy * 100).toFixed(2);
+
+        document.getElementById(
+            'complexity-text'
+        ).textContent =
+            bestModel.complexity_score;
+
+        document.getElementById(
+            'model-image'
+        ).src =
+            bestModel.image_url +
+            '?t=' +
+            Date.now();
+    }
+
+    function getCounterfactuals() {
+        const resultsDiv =
+            document.getElementById('cf-results');
+
+        resultsDiv.innerHTML =
+            '<p>Generating counterfactuals...</p>';
+
+        const payload = {
+            model_type:
+                document.querySelector(
+                    'input[name="modelType"]:checked'
+                ).value,
+
+            param_val:
+                currentBestModelParam,
+
+            penguin_idx:
+                document.getElementById(
+                    'penguin-select'
+                ).value,
+
+            target_class:
+                document.getElementById(
+                    'target-select'
+                ).value
+        };
+
+        const csrfToken =
+            document.querySelector(
+                '[name=csrfmiddlewaretoken]'
+            ).value;
+
+        fetch('/project2/counterfactuals/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'error') {
+                resultsDiv.innerHTML =
+                    '<p style="color:red;">' +
+                    data.message +
+                    '</p>';
+                return;
+            }
+
+            let html = `
+                <h3>Top 3 Counterfactual Examples</h3>
+                <table>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Bill Length</th>
+                        <th>Bill Depth</th>
+                        <th>Flipper Length</th>
+                        <th>Body Mass</th>
+                        <th>Island</th>
+                        <th>Sex</th>
+                        <th>Year</th>
+                        <th>Distance</th>
+                    </tr>
+            `;
+
+            data.data.forEach((cf, i) => {
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${cf.bill_length} mm</td>
+                        <td>${cf.bill_depth} mm</td>
+                        <td>${cf.flipper} mm</td>
+                        <td>${cf.mass} g</td>
+                        <td>${cf.island}</td>
+                        <td>${cf.sex}</td>
+                        <td>${cf.year}</td>
+                        <td>${cf.distance}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</table>';
+            resultsDiv.innerHTML = html;
+        });
+    }
+
+    function getFeatureEffects() {
+        const loading =
+            document.getElementById('effects-loading');
+
+        const pdp =
+            document.getElementById('pdp-image');
+
+        const ale =
+            document.getElementById('ale-image');
+
+        loading.textContent =
+            'Generating PDP and ALE plots...';
+
+        pdp.style.display = 'none';
+        ale.style.display = 'none';
+
+        const payload = {
+            model_type:
+                document.querySelector(
+                    'input[name="modelType"]:checked'
+                ).value,
+
+            param_val:
+                currentBestModelParam,
+
+            feature:
+                document.getElementById(
+                    'feature-select'
+                ).value
+        };
+
+        const csrfToken =
+            document.querySelector(
+                '[name=csrfmiddlewaretoken]'
+            ).value;
+
+        fetch('/project2/feature_effects/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status !== 'success') {
+                loading.textContent =
+                    'Error: ' + data.message;
+                return;
+            }
+
+            loading.textContent = '';
+
+            pdp.src =
+                data.pdp_url +
+                '?t=' +
+                Date.now();
+
+            ale.src =
+                data.ale_url +
+                '?t=' +
+                Date.now();
+
+            pdp.style.display = 'block';
+            ale.style.display = 'block';
+        });
+    }
+
+    slider.addEventListener(
+        'input',
+        updateModel
+    );
+
+    window.addEventListener(
+        'load',
+        updateModel
+    );
+</script>
+
+</body>
+</html>

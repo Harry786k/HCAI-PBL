@@ -28,3 +28,46 @@
 .centered-text {
     text-align: center;
 }
+/* --- Modern Button Styling for Project Hub --- */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Adds even space between buttons */
+    margin-top: 20px;
+}
+
+.button-container form {
+    width: 100%;
+    max-width: 400px; /* Prevents them from getting too wide */
+    margin-bottom: 0 !important; /* Overrides the inline HTML style */
+}
+
+.button-container button {
+    width: 100%;
+    padding: 16px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.button-container button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Slight jump effect when hovering */
+}
+
+/* Optional: Make the student name card look a bit cleaner */
+.student-item {
+    background-color: #f8f9fa;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    display: inline-block;
+    font-size: 18px;
+}

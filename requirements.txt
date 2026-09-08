@@ -1,0 +1,7 @@
+Django==6.0.4
+numpy==2.4.4
+pandas==3.0.2
+matplotlib==3.10.9
+scikit-learn==1.8.0
+palmerpenguins==0.1.6
+datasets==5.0.0

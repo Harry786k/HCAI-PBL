@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Completed</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            text-align: center;
+        }
+
+        .card {
+            max-width: 600px;
+            margin: 120px auto;
+            background: white;
+            padding: 45px;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: #1677ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Thank You!</h1>
+
+    <p>
+        You have completed the preference elicitation study.
+        Your responses have been recorded successfully.
+    </p>
+
+    <a href="{% url 'project4:index' %}">
+        Return to Project 4
+    </a>
+
+</div>
+
+</body>
+</html>
