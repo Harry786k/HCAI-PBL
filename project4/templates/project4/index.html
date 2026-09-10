@@ -14,76 +14,68 @@
             color: #222;
         }
 
+        .top-nav {
+            background: #34495e;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 25px;
+        }
+
+        .top-nav a:hover {
+            text-decoration: underline;
+        }
+
         .container {
-            max-width: 850px;
-            margin: 80px auto;
+            max-width: 900px;
+            margin: 50px auto;
             background: white;
             padding: 45px;
             border-radius: 14px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 10px;
             font-size: 36px;
+            margin-bottom: 10px;
         }
 
         .subtitle {
-            text-align: center;
             color: #666;
-            margin-bottom: 40px;
             font-size: 17px;
-        }
-
-        .report-section {
-            text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .report-btn {
             display: inline-block;
+            padding: 13px 25px;
             background: #34495e;
             color: white;
             text-decoration: none;
-            padding: 13px 25px;
             border-radius: 8px;
             font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .report-btn:hover {
-            background: #2c3e50;
-            transform: translateY(-2px);
+            margin-bottom: 35px;
         }
 
         .designs {
             display: flex;
             gap: 25px;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
         .card {
-            flex: 1;
-            min-width: 280px;
-            max-width: 350px;
+            width: 330px;
             padding: 30px;
-            border-radius: 12px;
-            text-align: center;
             background: #fafafa;
-            border: 1px solid #e4e4e4;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-        }
-
-        .card h2 {
-            margin-top: 0;
-        }
-
-        .card p {
-            color: #666;
-            min-height: 55px;
-            line-height: 1.5;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
         }
 
         .design1 {
@@ -94,20 +86,19 @@
             border-top: 5px solid #28a745;
         }
 
+        .card p {
+            color: #666;
+            line-height: 1.5;
+            min-height: 65px;
+        }
+
         .btn {
             display: inline-block;
-            margin-top: 15px;
             padding: 12px 20px;
             color: white;
             text-decoration: none;
             border-radius: 7px;
             font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
         }
 
         .btn-blue {
@@ -119,15 +110,22 @@
         }
 
         .footer {
-            text-align: center;
-            color: #999;
             margin-top: 40px;
+            color: #999;
             font-size: 13px;
         }
     </style>
 </head>
 
 <body>
+
+<div class="top-nav">
+    <a href="/home/">Hub / Home</a>
+    <a href="/project1/">Project 1</a>
+    <a href="/project2/">Project 2</a>
+    <a href="/project3/expert/">Project 3</a>
+    <a href="/project4/">Project 4</a>
+</div>
 
 <div class="container">
 
@@ -137,35 +135,49 @@
         Compare two different methods for collecting movie preferences.
     </p>
 
-    <div class="report-section">
-        <a
-            href="{% static 'project4/report.pdf' %}"
-            download
-            class="report-btn"
-        >
-            📄 Download Project 4 Report
-        </a>
+    <a
+        href="{% static 'project4/report.pdf' %}"
+        download
+        class="report-btn"
+    >
+        📄 Download Project 4 Report
+    </a>
+
+    <div class="designs">
+
+        <div class="card design1">
+            <h2>Design 1</h2>
+
+            <p>
+                Compare two movies and choose the one
+                you would rather watch.
+            </p>
+
+            <a
+                href="{% url 'project4:design1' %}"
+                class="btn btn-blue"
+            >
+                Start Pairwise Study
+            </a>
+        </div>
+
+        <div class="card design2">
+            <h2>Design 2</h2>
+
+            <p>
+                Rank ten movies from your most preferred
+                to your least preferred.
+            </p>
+
+            <a
+                href="{% url 'project4:design2' %}"
+                class="btn btn-green"
+            >
+                Start Ranking Study
+            </a>
+        </div>
+
     </div>
-
- <div class="designs">
-
-    <div class="card design1">
-        <h2>User Study</h2>
-
-        <p>
-            Complete two movie preference tasks:
-            first a pairwise comparison, then a top-10 ranking.
-        </p>
-
-        <a
-            href="{% url 'project4:design1' %}"
-            class="btn btn-blue"
-        >
-            Start User Study
-        </a>
-    </div>
-
-</div>
 
     <div class="footer">
         Human-Centric Artificial Intelligence

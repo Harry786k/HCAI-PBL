@@ -3,71 +3,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Expert Dashboard - Active Learning</title>
+    <title>Human-AI Collaboration Dashboard</title>
+
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
-        .article-box { background: #eef2f5; padding: 25px; border-left: 6px solid #3498db; border-radius: 5px; margin-bottom: 30px; font-size: 1.1em; line-height: 1.6; color: #333; }
-        .btn-group { display: flex; justify-content: space-between; gap: 15px; }
-        button { flex: 1; padding: 15px; font-size: 1.1em; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; color: white; transition: transform 0.1s, opacity 0.3s; }
-        button:hover { opacity: 0.9; transform: translateY(-2px); }
-        button:active { transform: translateY(0); }
-        .btn-world { background-color: #e74c3c; }
-        .btn-sports { background-color: #f39c12; }
-        .btn-business { background-color: #27ae60; }
-        .btn-scitech { background-color: #8e44ad; }
-        .message { padding: 15px; background: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px; text-align: center; font-weight: bold; border: 1px solid #c3e6cb; }
+        body { font-family: Arial, sans-serif; background:#f4f7f6; margin:0; padding:40px; color:#333; }
+        .container { max-width:900px; margin:auto; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,.1); }
+        h1, h2 { text-align:center; color:#2c3e50; }
+        .subtitle { text-align:center; color:#777; margin-bottom:25px; }
+        .report { text-align:center; margin-bottom:30px; }
+        .report a { background:#34495e; color:white; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold; }
+
+        .results { display:flex; gap:15px; margin-bottom:25px; }
+        .result { flex:1; padding:15px; text-align:center; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+        .result strong { display:block; font-size:24px; margin-top:8px; color:#2c3e50; }
+
+        .details { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:30px; }
+        .card { background:#f8f9fa; padding:20px; border-radius:8px; }
+        .card h3 { margin-top:0; color:#2c3e50; }
+        .card p { margin:8px 0; }
+
+        .task1 { border-left:5px solid #3498db; }
+        .task2 { border-left:5px solid #e74c3c; }
+        .task3 { border-left:5px solid #f39c12; }
+        .task4 { border-left:5px solid #27ae60; }
+
+        .article { background:#eef2f5; padding:25px; border-left:6px solid #3498db; border-radius:5px; margin-bottom:25px; line-height:1.6; }
+        .buttons { display:flex; gap:15px; }
+        button { flex:1; padding:14px; border:none; border-radius:7px; color:white; font-weight:bold; cursor:pointer; }
+        .world { background:#e74c3c; }
+        .sports { background:#f39c12; }
+        .business { background:#27ae60; }
+        .scitech { background:#8e44ad; }
+
+        .message { background:#d4edda; color:#155724; padding:12px; text-align:center; border-radius:5px; margin-bottom:20px; }
+
+        @media(max-width:700px) {
+            .results, .buttons { flex-direction:column; }
+            .details { grid-template-columns:1fr; }
+        }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Human-AI Collaboration Dashboard</h1>
-        <p class="subtitle">The Active Learning system is unsure about the following article. Please provide the expert label.</p>
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-            <a href="{% static 'project3/report.pdf' %}" download style="background-color: #34495e; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                📄 Download Project 3 Report
-            </a>
-        </div>
+    {% include "home/navbar.html" %}
+<div class="container">
 
-        <div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px;">
-            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #3498db; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 1: Baseline AI</div>
-                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">91.21%</div>
-            </div>
-            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #e74c3c; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 2: Expert</div>
-                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">72.14%</div>
-            </div>
-            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #f39c12; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 3: L2D Team</div>
-                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">88.22%</div>
-            </div>
-            <div style="flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #27ae60; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <div style="font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Task 4: Active Learning</div>
-                <div style="font-size: 1.6em; color: #2c3e50; font-weight: bold; margin-top: 5px;">86.80%</div>
-            </div>
-        </div>
-        
-        {% if message %}
-        <div class="message">{{ message }}</div>
-        {% endif %}
+    <h1>Human-AI Collaboration Dashboard</h1>
+    <p class="subtitle">Active Learning and Learning-to-Defer on the AG News dataset</p>
 
-        <div class="article-box">
-            {{ article }}
-        </div>
-
-        <form method="POST">
-            {% csrf_token %}
-            <div class="btn-group">
-                <button type="submit" name="label" value="World" class="btn-world">🌍 World</button>
-                <button type="submit" name="label" value="Sports" class="btn-sports">⚽️ Sports</button>
-                <button type="submit" name="label" value="Business" class="btn-business">💼 Business</button>
-                <button type="submit" name="label" value="Sci/Tech" class="btn-scitech">🔬 Sci/Tech</button>
-            </div>
-        </form>
+    <div class="report">
+        <a href="{% static 'project3/report.pdf' %}" download>
+            📄 Download Project 3 Report
+        </a>
     </div>
+
+    <div class="results">
+        <div class="result task1">Task 1: Baseline AI<strong>91.21%</strong></div>
+        <div class="result task2">Task 2: Simulated Expert<strong>72.14%</strong></div>
+        <div class="result task3">Task 3: L2D Team<strong>88.22%</strong></div>
+        <div class="result task4">Task 4: Active Learning<strong>86.80%</strong></div>
+    </div>
+
+    <div class="details">
+
+        <div class="card task1">
+            <h3>Task 1: Baseline Model</h3>
+            <p><strong>Dataset:</strong> AG News</p>
+            <p><strong>Features:</strong> TF-IDF</p>
+            <p><strong>Model:</strong> Logistic Regression</p>
+            <p><strong>Accuracy:</strong> 91.21%</p>
+        </div>
+
+        <div class="card task2">
+            <h3>Task 2: Simulated Expert</h3>
+            <p><strong>Overall Accuracy:</strong> 72.14%</p>
+            <p>Sports: 95%</p>
+            <p>Business: 90%</p>
+            <p>World: 60%</p>
+            <p>Sci/Tech: 40%</p>
+        </div>
+
+        <div class="card task3">
+            <h3>Task 3: Learning-to-Defer</h3>
+            <p><strong>Team Accuracy:</strong> 88.22%</p>
+            <p><strong>Deferral Rate:</strong> 24.74%</p>
+            <p><strong>Expert on Deferred:</strong> 67.50%</p>
+            <p><strong>AI on Deferred:</strong> 79.57%</p>
+            <p><strong>AI on Non-Deferred:</strong> 95.03%</p>
+        </div>
+
+        <div class="card task4">
+            <h3>Task 4: Active Learning</h3>
+            <p><strong>Method:</strong> Uncertainty Sampling</p>
+            <p><strong>Query Budget:</strong> 2000 articles</p>
+            <p><strong>Team Accuracy:</strong> 86.80%</p>
+            <p><strong>Deferral Rate:</strong> 27.36%</p>
+        </div>
+
+    </div>
+
+    <h2>Human Expert Interface</h2>
+    <p class="subtitle">Choose the correct topic for the selected article.</p>
+
+    {% if message %}
+        <div class="message">{{ message }}</div>
+    {% endif %}
+
+    <div class="article">
+        {{ article }}
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="buttons">
+            <button name="label" value="World" class="world">🌍 World</button>
+            <button name="label" value="Sports" class="sports">⚽ Sports</button>
+            <button name="label" value="Business" class="business">💼 Business</button>
+            <button name="label" value="Sci/Tech" class="scitech">🔬 Sci/Tech</button>
+        </div>
+    </form>
+
+</div>
 </body>
 </html>

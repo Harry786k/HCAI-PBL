@@ -1,0 +1,76 @@
+<style>
+    .site-nav {
+        background: white;
+        border-bottom: 1px solid #e3e7ed;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 14px 30px;
+    }
+
+    .site-nav-inner {
+        max-width: 1100px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .site-brand {
+        font-size: 20px;
+        font-weight: bold;
+        color: #243b53;
+        text-decoration: none;
+    }
+
+    .site-brand span {
+        color: #147df5;
+    }
+
+    .site-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .site-links a {
+        color: #486581;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 9px 14px;
+        border-radius: 20px;
+        transition: 0.2s;
+    }
+
+    .site-links a:hover {
+        background: #eef4ff;
+        color: #147df5;
+    }
+
+    @media (max-width: 750px) {
+        .site-nav-inner {
+            flex-direction: column;
+        }
+
+        .site-links {
+            justify-content: center;
+        }
+    }
+</style>
+
+<nav class="site-nav">
+    <div class="site-nav-inner">
+
+        <a href="/home/" class="site-brand">
+            HCAI <span>Workspace</span>
+        </a>
+
+        <div class="site-links">
+            <a href="/home/">Home</a>
+            <a href="/project1/">Project 1</a>
+            <a href="/project2/">Project 2</a>
+            <a href="/project3/expert/">Project 3</a>
+            <a href="/project4/">Project 4</a>
+        </div>
+
+    </div>
+</nav>

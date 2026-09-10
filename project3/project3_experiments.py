@@ -103,7 +103,31 @@ print(f"2. Human Expert Alone: {expert_accuracy * 100:.2f}%")
 print(f"3. Human-AI Team:     {team_accuracy * 100:.2f}%")
 print(f"\nDeferral Stats:")
 print(f"The AI deferred {deferred_count} out of {total_test} articles to the expert ({(deferred_count/total_test)*100:.2f}%).")
+# Deferral quality metrics
+y_test_np = np.array(y_test)
+defer_mask = defer_decisions == 1
+keep_mask = defer_decisions == 0
 
+expert_acc_deferred = accuracy_score(
+    y_test_np[defer_mask],
+    expert_preds_test[defer_mask]
+)
+
+ai_acc_deferred = accuracy_score(
+    y_test_np[defer_mask],
+    y_pred[defer_mask]
+)
+
+ai_acc_not_deferred = accuracy_score(
+    y_test_np[keep_mask],
+    y_pred[keep_mask]
+)
+
+print("\n--- Deferral Quality ---")
+print(f"Deferral Rate: {(deferred_count / total_test) * 100:.2f}%")
+print(f"Expert Accuracy on Deferred Examples: {expert_acc_deferred * 100:.2f}%")
+print(f"AI Accuracy on Deferred Examples: {ai_acc_deferred * 100:.2f}%")
+print(f"AI Accuracy on Non-Deferred Examples: {ai_acc_not_deferred * 100:.2f}%")
 # ==========================================
 # TASK 4: ACTIVE LEARNING (UNCERTAINTY SAMPLING)
 # ==========================================
