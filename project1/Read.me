@@ -1,0 +1,42 @@
+# Project 1 — Automated Machine Learning
+
+Project 1 implements a simple supervised machine learning pipeline through a Django interface.
+
+## Features
+
+The user can upload a CSV dataset directly through the webpage.
+
+The application:
+
+- Reads the uploaded CSV file
+- Uses the final column as the target variable
+- Visualizes the dataset
+- Splits the data into 80% training and 20% testing data
+- Trains a K-Nearest Neighbors classifier
+- Tests different values of `k`
+- Selects the best-performing value
+- Displays the final test accuracy
+
+The interface also displays a visualization of the uploaded data together with the model results.
+
+## Machine Learning
+
+The model used is K-Nearest Neighbors (KNN).
+
+Several values of `k` are evaluated and the model with the highest test accuracy is selected.
+
+The implementation uses Pandas, NumPy, Matplotlib and Scikit-learn.
+
+## Run
+
+Start the main Django server from the repository root:
+
+```bash
+python manage.py runserver
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000/project1/
+```
