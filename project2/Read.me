@@ -1,0 +1,47 @@
+# Project 2 — Explainability
+
+Project 2 explores machine learning interpretability using the Palmer Penguins dataset.
+
+The objective is to compare predictive performance with model complexity and provide different forms of model explanation.
+
+## Models
+
+Two model types are available:
+
+- Decision Tree
+- Logistic Regression
+
+Different levels of regularization are evaluated so that the user can explore the relationship between model complexity and predictive performance.
+
+## Counterfactual Explanations
+
+The interface allows the user to select a penguin and a desired target species.
+
+New samples are generated around the selected example and predictions are evaluated using the currently selected model.
+
+Valid counterfactual examples are ranked using a MAD-weighted L1 distance and the closest examples are displayed to the user.
+
+## Feature Effect Plots
+
+The project also includes:
+
+- Partial Dependence Plots (PDP)
+- Accumulated Local Effects (ALE)
+
+These calculations are implemented directly as part of the project rather than using a dedicated explainability package.
+
+The user can select a numerical feature and inspect its effect on the predicted probability of the different penguin species.
+
+## Run
+
+From the repository root:
+
+```bash
+python manage.py runserver
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000/project2/
+```
