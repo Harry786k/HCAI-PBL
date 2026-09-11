@@ -1,0 +1,69 @@
+# Project 4 — Preference Elicitation
+
+Project 4 explores different methods for collecting user preferences for movies.
+
+The project compares two preference elicitation designs.
+
+## Movie Representation
+
+Movies are represented using information from the movie dataset.
+
+The main features include:
+
+- IMDb score
+- Release year
+- Genres
+
+IMDb score and release year are scaled using MinMaxScaler.
+
+Genres are represented using one-hot encoded features.
+
+Movie titles are used for displaying movies to participants.
+
+## Design 1 — Pairwise Preference
+
+The participant is shown two movies.
+
+For each pair, the participant selects the movie they would rather watch.
+
+After submitting a choice, another pair of movies can be presented.
+
+This design provides a simple preference decision with a low amount of information required from the participant at each step.
+
+## Design 2 — Ranking
+
+The participant is shown ten movies.
+
+The movies can be reordered using drag-and-drop and ranked from most preferred to least preferred.
+
+The submitted order represents the participant's preference ranking.
+
+This design collects more preference information in a single interaction than the pairwise design.
+
+## User Study
+
+The proposed study compares the two designs in terms of factors such as ease of use, interaction effort and the amount of preference information collected.
+
+The study is described in more detail in the accompanying PDF report.
+
+## Interface and Report
+
+The Project 4 landing page provides access to:
+
+- Pairwise Study
+- Ranking Study
+- Project 4 PDF Report
+
+## Run
+
+From the repository root:
+
+```bash
+python manage.py runserver
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000/project4/
+```
