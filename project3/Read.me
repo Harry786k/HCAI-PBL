@@ -1,0 +1,56 @@
+# Project 3 — Active Learning and Learning-to-Defer
+
+Project 3 studies collaboration between an AI classifier and a simulated human expert.
+
+The experiments use the AG News text classification dataset.
+
+## Baseline AI
+
+The baseline system uses TF-IDF text features together with Logistic Regression to classify news articles into the AG News categories.
+
+The baseline test accuracy is used as a reference for the human-AI collaboration experiments.
+
+## Simulated Expert
+
+A simulated expert is implemented with different reliability levels for different news categories.
+
+This creates an expert that is strong in some areas but weaker in others, rather than assuming a perfect human expert.
+
+## Learning-to-Defer
+
+The learning-to-defer system decides whether the AI should:
+
+- Make the prediction itself, or
+- Defer the example to the simulated expert
+
+The evaluation considers both overall team accuracy and the quality of the deferral decisions.
+
+The interface reports values such as:
+
+- Team accuracy
+- Deferral rate
+- Expert accuracy on deferred examples
+- AI accuracy on deferred examples
+- AI accuracy on non-deferred examples
+
+## Active Learning
+
+An uncertainty-sampling strategy is used to decide which training examples should be presented to the expert.
+
+This allows the system to learn about expert competence while limiting the number of expert queries.
+
+## Interface and Report
+
+The project includes a dashboard containing the main experimental results and an expert interaction interface.
+
+A PDF report describing the methods, design choices and results is available from the Project 3 interface.
+
+## Run
+
+From the repository root:
+
+```bash
+python manage.py runserver
+```
+
+Then open the Project 3 page using the navigation bar.
